@@ -1,8 +1,8 @@
 //components
-
-//css
 import { Container } from "./components/Container";
 import { Heading } from "./components/Heading";
+//css
+
 import "./styles/global.css";
 import "./styles/theme.css";
 
