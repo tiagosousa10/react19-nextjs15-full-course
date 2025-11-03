@@ -11,6 +11,7 @@ import { Menu } from "./components/Menu";
 //css
 import "./styles/global.css";
 import "./styles/theme.css";
+import { Footer } from "./components/Footer";
 
 export function App() {
   return (
@@ -30,7 +31,7 @@ export function App() {
       <Container>
         <form action="" className="form">
           <div className="formRow">
-            <DefaultInput id="meuInput" type="text" labelText="task" disabled />
+            <DefaultInput id="meuInput" type="text" labelText="task" />
           </div>
 
           <div className="formRow">
@@ -43,9 +44,12 @@ export function App() {
 
           <div className="formRow">
             <DefaultButton icon={<PlayCircleIcon />} color="green" />
-            <DefaultButton icon={<StopCircleIcon />} color="red" />
           </div>
         </form>
+      </Container>
+
+      <Container>
+        <Footer />
       </Container>
     </>
   );
