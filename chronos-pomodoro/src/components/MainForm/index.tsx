@@ -1,8 +1,8 @@
-import { PlayCircleIcon } from "lucide-react";
+import { PlayCircleIcon, StopCircleIcon } from "lucide-react";
 import { Cycles } from "../Cycles";
 import { DefaultButton } from "../DefaultButton";
 import { DefaultInput } from "../DefaultInput";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { TaskModel } from "../../models/TaskModel";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
 import { getNextCycle } from "../../utils/getNextCycle";
@@ -55,6 +55,23 @@ export function MainForm() {
     });
   }
 
+  function handleInterruptTask() {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        activeTask: null,
+        secondsRemaining: 0,
+        formattedSecondsRemaining: "00:00",
+        tasks: prevState.tasks.map((task) => {
+          if (prevState.activeTask && prevState.activeTask?.id === task.id) {
+            return { ...task, interruptDate: Date.now() };
+          }
+          return task;
+        }),
+      };
+    });
+  }
+
   return (
     <form onSubmit={handleCreateNewTask} action="" className="form">
       <div className="formRow">
@@ -63,6 +80,7 @@ export function MainForm() {
           type="text"
           labelText={"task"}
           ref={taskNameInput}
+          disabled={!!state.activeTask}
         />
       </div>
 
@@ -76,7 +94,27 @@ export function MainForm() {
         </div>
       )}
       <div className="formRow">
-        <DefaultButton icon={<PlayCircleIcon />} color="green" />
+        {!state.activeTask && (
+          <DefaultButton
+            type="submit"
+            icon={<PlayCircleIcon />}
+            color="green"
+            aria-label="Iniciar nova Tarefa"
+            title="Iniciar nova Tarefa"
+            key={"botao submit"}
+          />
+        )}
+        {!!state.activeTask && (
+          <DefaultButton
+            title="Interromper Tarefa"
+            aria-label="Interromper Tarefa"
+            type="button"
+            icon={<StopCircleIcon />}
+            color="red"
+            onClick={handleInterruptTask}
+            key={"botao button"}
+          />
+        )}
       </div>
     </form>
   );
