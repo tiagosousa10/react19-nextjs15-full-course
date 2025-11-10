@@ -44,6 +44,16 @@ export function MainForm() {
     const secondsRemaining = newTask.duration * 60;
 
     dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
+
+    const worker = new Worker(
+      new URL("../../workers/timerWorker.js", import.meta.url)
+    );
+
+    worker.postMessage("FECHAR");
+
+    worker.onmessage = function (event) {
+      console.log("principal recebeu", event.data);
+    };
   }
 
   function handleInterruptTask() {
@@ -68,7 +78,7 @@ export function MainForm() {
         <Tips />
       </div>
 
-      {state.currentCycle === 0 && (
+      {state.currentCycle > 0 && (
         <div className="formRow">
           <Cycles />
         </div>
