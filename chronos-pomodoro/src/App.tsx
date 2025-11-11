@@ -6,24 +6,14 @@ import { Home } from "./pages/Home";
 //css
 import "./styles/global.css";
 import "./styles/theme.css";
+import { MessagesContainer } from "./components/MessagesContainer";
 
 export function App() {
     return (
         <TaskContextProvider>
-            <Home />;
-            <ToastContainer
-                position="top-right"
-                autoClose={1000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Bounce}
-            />
+            <MessagesContainer>
+                <Home />;
+            </MessagesContainer>
         </TaskContextProvider>
     );
 }

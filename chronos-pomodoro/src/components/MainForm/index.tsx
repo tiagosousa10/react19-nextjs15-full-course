@@ -9,93 +9,98 @@ import { getNextCycle } from "../../utils/getNextCycle";
 import { getNextCycleType } from "../../utils/getNextCycleType";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 import { Tips } from "../Tips";
+import { showMessage } from "../../adapters/showMessage";
 
 export function MainForm() {
-  const { dispatch, state } = useTaskContext();
-  const taskNameInput = useRef<HTMLInputElement>(null);
+    const { dispatch, state } = useTaskContext();
+    const taskNameInput = useRef<HTMLInputElement>(null);
 
-  const nextCycle = getNextCycle(state.currentCycle);
-  const nextCycleType = getNextCycleType(nextCycle);
+    const nextCycle = getNextCycle(state.currentCycle);
+    const nextCycleType = getNextCycleType(nextCycle);
 
-  function handleCreateNewTask(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+    function handleCreateNewTask(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        showMessage.dissmiss();
 
-    if (taskNameInput.current === null) {
-      return;
+        if (taskNameInput.current === null) {
+            return;
+        }
+
+        const taskName = taskNameInput.current.value.trim();
+
+        if (!taskName) {
+            showMessage.warning("Digite o nome da tarefa");
+            return;
+        }
+
+        const newTask: TaskModel = {
+            id: Date.now().toString(),
+            name: taskName,
+            startDate: Date.now(),
+            completeDate: null,
+            interruptDate: null,
+            duration: state.config[nextCycleType],
+            type: nextCycleType,
+        };
+
+        const secondsRemaining = newTask.duration * 60;
+
+        dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
+        showMessage.success("Tarefa Iniciada.");
     }
 
-    const taskName = taskNameInput.current.value.trim();
-
-    if (!taskName) {
-      alert("digite o nome da tarefa");
-      return;
+    function handleInterruptTask() {
+        showMessage.dissmiss();
+        showMessage.info("Tarefa Interrompida.");
+        dispatch({
+            type: TaskActionTypes.INTERRUPT_TASK,
+        });
     }
 
-    const newTask: TaskModel = {
-      id: Date.now().toString(),
-      name: taskName,
-      startDate: Date.now(),
-      completeDate: null,
-      interruptDate: null,
-      duration: state.config[nextCycleType],
-      type: nextCycleType,
-    };
+    return (
+        <form onSubmit={handleCreateNewTask} action="" className="form">
+            <div className="formRow">
+                <DefaultInput
+                    id="meuInput"
+                    type="text"
+                    labelText={"task"}
+                    ref={taskNameInput}
+                    disabled={!!state.activeTask}
+                />
+            </div>
 
-    const secondsRemaining = newTask.duration * 60;
+            <div className="formRow">
+                <Tips />
+            </div>
 
-    dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
-  }
-
-  function handleInterruptTask() {
-    dispatch({
-      type: TaskActionTypes.INTERRUPT_TASK,
-    });
-  }
-
-  return (
-    <form onSubmit={handleCreateNewTask} action="" className="form">
-      <div className="formRow">
-        <DefaultInput
-          id="meuInput"
-          type="text"
-          labelText={"task"}
-          ref={taskNameInput}
-          disabled={!!state.activeTask}
-        />
-      </div>
-
-      <div className="formRow">
-        <Tips />
-      </div>
-
-      {state.currentCycle > 0 && (
-        <div className="formRow">
-          <Cycles />
-        </div>
-      )}
-      <div className="formRow">
-        {!state.activeTask && (
-          <DefaultButton
-            type="submit"
-            icon={<PlayCircleIcon />}
-            color="green"
-            aria-label="Iniciar nova Tarefa"
-            title="Iniciar nova Tarefa"
-            key={"botao submit"}
-          />
-        )}
-        {!!state.activeTask && (
-          <DefaultButton
-            title="Interromper Tarefa"
-            aria-label="Interromper Tarefa"
-            type="button"
-            icon={<StopCircleIcon />}
-            color="red"
-            onClick={handleInterruptTask}
-            key={"botao button"}
-          />
-        )}
-      </div>
-    </form>
-  );
+            {state.currentCycle > 0 && (
+                <div className="formRow">
+                    <Cycles />
+                </div>
+            )}
+            <div className="formRow">
+                {!state.activeTask && (
+                    <DefaultButton
+                        type="submit"
+                        icon={<PlayCircleIcon />}
+                        color="green"
+                        aria-label="Iniciar nova Tarefa"
+                        title="Iniciar nova Tarefa"
+                        key={"botao submit"}
+                    />
+                )}
+                {!!state.activeTask && (
+                    <DefaultButton
+                        title="Interromper Tarefa"
+                        aria-label="Interromper Tarefa"
+                        type="button"
+                        icon={<StopCircleIcon />}
+                        color="red"
+                        onClick={handleInterruptTask}
+                        key={"botao button"}
+                    />
+                )}
+            </div>
+        </form>
+    );
 }
