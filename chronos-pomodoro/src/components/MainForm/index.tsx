@@ -21,7 +21,7 @@ export function MainForm() {
 
   function handleCreateNewTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    showMessage.dissmiss();
+    showMessage.dismiss();
 
     if (taskNameInput.current === null) {
       return;
