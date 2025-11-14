@@ -14,9 +14,8 @@ type TaskContextProviderProps = {
 export function TaskContextProvider({ children }: TaskContextProviderProps) {
   const [state, dispatch] = useReducer(taskReducer, initialTaskState, () => {
     const storageState = localStorage.getItem("state") || null;
-    if (!storageState) {
-      return initialTaskState;
-    }
+
+    if (storageState === null) return initialTaskState;
 
     const parsedStorageState = JSON.parse(storageState) as TaskStateModel;
 
