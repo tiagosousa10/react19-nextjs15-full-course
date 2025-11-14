@@ -44,7 +44,7 @@ export function MainForm() {
       type: nextCycleType,
     };
 
-    const secondsRemaining = newTask.duration * 60;
+    // const secondsRemaining = newTask.duration * 60;
 
     dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
     showMessage.success("Tarefa Iniciada.");

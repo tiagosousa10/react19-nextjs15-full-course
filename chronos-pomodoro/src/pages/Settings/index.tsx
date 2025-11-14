@@ -11,50 +11,44 @@ import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 
 export function Settings() {
   const { state, dispatch } = useTaskContext();
-
-  const formErrors: any[] = [];
-
   const workTimeInput = useRef<HTMLInputElement>(null);
   const shortBreakTimeInput = useRef<HTMLInputElement>(null);
   const longBreakTimeInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    document.title = "Settings - Chronos Pomodoro";
-  });
+    document.title = "Configurações - Chronos Pomodoro";
+  }, []);
 
   function handleSaveSettings(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     showMessage.dismiss();
+
+    const formErrors = [];
 
     const workTime = Number(workTimeInput.current?.value);
     const shortBreakTime = Number(shortBreakTimeInput.current?.value);
     const longBreakTime = Number(longBreakTimeInput.current?.value);
 
     if (isNaN(workTime) || isNaN(shortBreakTime) || isNaN(longBreakTime)) {
-      formErrors.push("Digite apenas valores numéricos para os campos.");
+      formErrors.push("Digite apenas números para TODOS os campos");
     }
 
     if (workTime < 1 || workTime > 99) {
-      formErrors.push("O tempo de foco deve estar entre 1 e 99 minutos.");
+      formErrors.push("Digite valores entre 1 e 99 para foco");
     }
 
     if (shortBreakTime < 1 || shortBreakTime > 30) {
-      formErrors.push(
-        "O tempo de descanso curto deve estar entre 1 e 30 minutos."
-      );
+      formErrors.push("Digite valores entre 1 e 30 para descanso curto");
     }
 
     if (longBreakTime < 1 || longBreakTime > 60) {
-      formErrors.push(
-        "O tempo de descanso longo deve estar entre 1 e 60 minutos."
-      );
+      formErrors.push("Digite valores entre 1 e 60 para descanso longo");
     }
 
     if (formErrors.length > 0) {
       formErrors.forEach((error) => {
         showMessage.error(error);
       });
-
       return;
     }
 
@@ -66,8 +60,7 @@ export function Settings() {
         longBreakTime,
       },
     });
-
-    showMessage.success("Configurações salvas com sucesso.");
+    showMessage.success("Configurações salvas");
   }
 
   return (
@@ -78,17 +71,17 @@ export function Settings() {
 
       <Container>
         <p style={{ textAlign: "center" }}>
-          Modifique as configurações para tempo de foco, pausas, descanso curto
-          e descanso longo
+          Modifique as configurações para tempo de foco, descanso curso e
+          descanso longo.
         </p>
       </Container>
 
       <Container>
-        <form onSubmit={handleSaveSettings} action="form">
+        <form onSubmit={handleSaveSettings} action="" className="form">
           <div className="formRow">
             <DefaultInput
               id="workTime"
-              labelText="foco"
+              labelText="Foco"
               ref={workTimeInput}
               defaultValue={state.config.workTime}
               type="number"
@@ -112,12 +105,11 @@ export function Settings() {
               type="number"
             />
           </div>
-
           <div className="formRow">
             <DefaultButton
               icon={<SaveIcon />}
-              aria-label="Guardar Configuraçoes"
-              title="Guardar Configuraçoes"
+              aria-label="Salvar configurações"
+              title="Salvar configurações"
             />
           </div>
         </form>
