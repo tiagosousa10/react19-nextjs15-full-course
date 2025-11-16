@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { SpinLoader } from "@/components/SpinLoader";
 
 export default async function Home() {
   const SECRET_KEY = "secret";
@@ -6,6 +7,7 @@ export default async function Home() {
   return (
     <>
       <Header />
+      <SpinLoader />
     </>
   );
 }
