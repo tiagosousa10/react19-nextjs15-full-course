@@ -1,18 +1,19 @@
-"use client";
-
 import clsx from "clsx";
+import Link from "next/link";
 
 export function Header() {
-  console.log("Header");
   return (
-    <h1
-      className={clsx(
-        true &&
-          "text-6xl font-bold hover:text-blue-50 hover:bg-blue-500 transition duration-1000 "
-      )}
-      onClick={() => alert(123)}
-    >
-      Ola dentro de page.tsx
-    </h1>
+    <header>
+      <h1
+        className={clsx(
+          "text-4xl/normal font-extrabold py-8",
+          "sm:text-5xl/normal sm:py-10",
+          "md:textl-6xl md:py-11",
+          "lg:text-7xl lg:py-12"
+        )}
+      >
+        <Link href="#">The Blog</Link>
+      </h1>
+    </header>
   );
 }
