@@ -13,7 +13,7 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en">
-      <body className="qualquer">
+      <body className="">
         <div className="">{children}</div>
       </body>
     </html>
