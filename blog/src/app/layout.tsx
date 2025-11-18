@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     default: "The Blog - Next.js",
     template: "%s | The Blog",
   },
-  description: "Descrição da pagina",
+  description: "Descrição da Pagina",
 };
 
 type RootLayoutProps = {
