@@ -1,8 +1,8 @@
-import { findPostBySlugCached } from "@/lib/post/queries";
-import Image from "next/image";
-import { PostHeading } from "../PostHeading";
-import { PostDate } from "../PostDate";
-import { SafeMarkdown } from "../SafeMarkdown";
+import { findPostBySlugCached } from '@/lib/post/queries';
+import Image from 'next/image';
+import { PostHeading } from '../PostHeading';
+import { PostDate } from '../PostDate';
+import { SafeMarkdown } from '../SafeMarkdown';
 
 type SinglePostProps = {
   slug: string;
@@ -11,24 +11,31 @@ type SinglePostProps = {
 export async function SinglePost({ slug }: SinglePostProps) {
   const post = await findPostBySlugCached(slug).catch(() => undefined);
 
+  if (!post) {
+    // You can render a 404-ish state or null here
+    return <p>Post not found.</p>;
+  }
+
   return (
     <article className="mb-16">
       <header className="group flex flex-col gap-4 mb-4">
-        <Image
-          className="rounded-xl"
-          src={post?.coverImageUrl}
-          width={1200}
-          height={720}
-          alt={post?.title}
-        />
-        <PostHeading url={`/post/${post?.slug}`}>{post?.title}</PostHeading>
+        {post.coverImageUrl && (
+          <Image
+            className="rounded-xl"
+            src={post.coverImageUrl}
+            width={1200}
+            height={720}
+            alt={post.title}
+          />
+        )}
+        <PostHeading url={`/post/${post.slug}`}>{post.title}</PostHeading>
         <p>
-          {post?.author} | <PostDate dateTime={post?.createdAt} />
+          {post.author} | <PostDate dateTime={post.createdAt} />
         </p>
       </header>
-      <p className="mb-4 text-xl text-slate-600">{post?.excerpt}</p>
+      <p className="mb-4 text-xl text-slate-600">{post.excerpt}</p>
 
-      <SafeMarkdown markdown={post?.content} />
+      <SafeMarkdown markdown={post.content} />
     </article>
   );
 }
